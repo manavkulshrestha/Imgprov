@@ -253,33 +253,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     }
-    private void sign() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, FileNotFoundException {
-
-
-
-//        fis = new FileInputStream(file);
-//        Bitmap bi = BitmapFactory.decodeStream(fis);
-//        bi=bi.copy(Bitmap.Config.ARGB_8888,false);
-//
-//        Canvas myCanvas = new Canvas(bi);
-
-
-        ////////////////////read jpeg and convert raw bytes to byte []///////////////////////////////
-
-//        FileInputStream fis;
-//        byteArray = new byte[(int) file.length()];
-//        try{
-//            fis = new FileInputStream(file);
-//            fis.read(byteArray);
-//            fis.close();
-//
-//        }catch(IOException ioExp){
-//            ioExp.printStackTrace();
-//        }
-//        String s = new String(byteArray);
-//        Log.e("Raw_bytes", s);
-
-        //byteArray = new byte[]{ 1,2,3,4,5,6,7,8,9,10 };
+    private void sign() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
 
         Signature sign = Signature.getInstance("SHA256withECDSA");
         sign.initSign(privateKey);
