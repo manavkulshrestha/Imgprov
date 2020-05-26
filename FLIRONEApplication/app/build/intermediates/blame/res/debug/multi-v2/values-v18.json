@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/kaiyeyu/Desktop/master project/code/2019_fall_Master/FLIRONEApplication/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v18/values-v18.xml",
+            "map": [
+                {
+                    "source": "/Users/kaiyeyu/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/2b613e45c25ffc38606713f31be26ab6/res/values-v18/values-v18.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "48",
+                        "endOffsets": "99"
+                    }
+                }
+            ]
+        }
+    ]
+}

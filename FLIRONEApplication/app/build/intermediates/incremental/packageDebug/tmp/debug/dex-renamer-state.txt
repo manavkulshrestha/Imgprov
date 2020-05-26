@@ -1,0 +1,4 @@
+#Sun Nov 17 13:53:11 CST 2019
+base.0=/Users/kaiyeyu/Downloads/FLIROneSDKBundle/FLIRONEExampleApplication/app/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
