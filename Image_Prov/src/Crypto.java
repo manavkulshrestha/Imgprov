@@ -15,21 +15,12 @@ public class Crypto {
 
     private Signature signature;
 
-    public Crypto(File imgFile) {
-        try {
-            KeyPair keys = KeyPairGenerator.getInstance("EC").generateKeyPair();
-            this.publicKey = keys.getPublic();
-            this.privateKey = keys.getPrivate();
-        } catch (NoSuchAlgorithmException e){
-            e.printStackTrace();
-        }
+    public Crypto(byte[] imgBytes, PublicKey publicKey) {
 
-        imgBytes = new byte[(int) imgFile.length()];
-        try (InputStream fis = new FileInputStream(imgFile)) {
-            fis.read(imgBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.publicKey = publicKey;
+        privateKey = null;
+
+        this.imgBytes = imgBytes;
 
         try {
             signature = Signature.getInstance("SHA256withECDSA");
@@ -38,7 +29,49 @@ public class Crypto {
         }
     }
 
+    public Crypto(byte[] imgBytes) {
+        try {
+            KeyPair keys = KeyPairGenerator.getInstance("EC").generateKeyPair();
+            publicKey = keys.getPublic();
+            privateKey = keys.getPrivate();
+        } catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+
+        this.imgBytes = imgBytes;
+
+        try {
+            signature = Signature.getInstance("SHA256withECDSA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static byte[] fileToBytes(File file) {
+        byte[] fileBytes = new byte[(int) file.length()];
+        try (InputStream fis = new FileInputStream(file)) {
+            fis.read(fileBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileBytes;
+    }
+
+    public Crypto(File imgFile) {
+        this(fileToBytes(imgFile));
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
+
     public byte[] sign() {
+        if (privateKey == null) {
+            // only a verifier was built
+            return null;
+        }
+
         try {
             signature.initSign(privateKey);
             signature.update(imgBytes);

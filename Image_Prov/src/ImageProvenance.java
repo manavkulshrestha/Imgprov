@@ -4,6 +4,7 @@ import java.security.*;
 public class ImageProvenance {
 
     public static void main(String[] args) throws SignatureException {
+        // rudimentary test
         Crypto catCrypto = new Crypto(new File("resources\\cat.jpg"));
         Crypto duckCrypto = new Crypto(new File("resources\\duck.jpg"));
 
