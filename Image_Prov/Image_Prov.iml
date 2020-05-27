@@ -7,5 +7,20 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/commons-imaging-1.0-alpha1-tests.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/commons-imaging-1.0-alpha1.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/libs/commons-imaging-1.0-alpha1-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/commons-imaging-1.0-alpha1-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/commons-imaging-1.0-alpha1-test-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

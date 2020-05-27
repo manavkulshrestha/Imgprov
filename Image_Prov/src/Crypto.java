@@ -1,12 +1,7 @@
-import javax.crypto.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.*;
 
 public class Crypto {
-    // Handles cryptography stuff for objects
 
     private byte[] imgBytes;
 
@@ -15,6 +10,13 @@ public class Crypto {
 
     private Signature signature;
 
+    /**
+     * Constructor (verifier)
+     *
+     * @param imgBytes  The image as an array of bytes.
+     * @param publicKey If public key is specified, keypair won't be generated. This Crypto object can only be used
+     *                  for verification, not signing.
+     */
     public Crypto(byte[] imgBytes, PublicKey publicKey) {
 
         this.publicKey = publicKey;
@@ -29,6 +31,11 @@ public class Crypto {
         }
     }
 
+    /**
+     * Constructor (Signer and verifier)
+     *
+     * @param imgBytes The image as an array of bytes.
+     */
     public Crypto(byte[] imgBytes) {
         try {
             KeyPair keys = KeyPairGenerator.getInstance("EC").generateKeyPair();
@@ -47,19 +54,13 @@ public class Crypto {
         }
     }
 
-    public static byte[] fileToBytes(File file) {
-        byte[] fileBytes = new byte[(int) file.length()];
-        try (InputStream fis = new FileInputStream(file)) {
-            fis.read(fileBytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return fileBytes;
-    }
-
+    /**
+     * Constructor (Signer and verifier)
+     *
+     * @param imgFile The image as a File object.
+     */
     public Crypto(File imgFile) {
-        this(fileToBytes(imgFile));
+        this(Utilities.fileToBytes(imgFile));
     }
 
     public PublicKey getPublicKey() {
