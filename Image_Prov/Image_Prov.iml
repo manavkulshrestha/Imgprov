@@ -22,5 +22,18 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/json-simple-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/slf4j-api-1.7.30.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/java.base-2020-05-15.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/java.base-2020-05-15.jar!/META-INF/modules/java.base/classes" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

@@ -3,8 +3,6 @@ import java.security.*;
 
 public class Crypto {
 
-    private byte[] imgBytes;
-
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
@@ -13,16 +11,13 @@ public class Crypto {
     /**
      * Constructor (verifier)
      *
-     * @param imgBytes  The image as an array of bytes.
      * @param publicKey If public key is specified, keypair won't be generated. This Crypto object can only be used
      *                  for verification, not signing.
      */
-    public Crypto(byte[] imgBytes, PublicKey publicKey) {
+    public Crypto(PublicKey publicKey) {
 
         this.publicKey = publicKey;
         privateKey = null;
-
-        this.imgBytes = imgBytes;
 
         try {
             signature = Signature.getInstance("SHA256withECDSA");
@@ -33,10 +28,8 @@ public class Crypto {
 
     /**
      * Constructor (Signer and verifier)
-     *
-     * @param imgBytes The image as an array of bytes.
      */
-    public Crypto(byte[] imgBytes) {
+    public Crypto() {
         try {
             KeyPair keys = KeyPairGenerator.getInstance("EC").generateKeyPair();
             publicKey = keys.getPublic();
@@ -45,8 +38,6 @@ public class Crypto {
             e.printStackTrace();
         }
 
-        this.imgBytes = imgBytes;
-
         try {
             signature = Signature.getInstance("SHA256withECDSA");
         } catch (NoSuchAlgorithmException e) {
@@ -54,20 +45,11 @@ public class Crypto {
         }
     }
 
-    /**
-     * Constructor (Signer and verifier)
-     *
-     * @param imgFile The image as a File object.
-     */
-    public Crypto(File imgFile) {
-        this(Utilities.fileToBytes(imgFile));
-    }
-
     public PublicKey getPublicKey() {
         return publicKey;
     }
 
-    public byte[] sign() {
+    public byte[] sign(byte[] data) {
         if (privateKey == null) {
             // only a verifier was built
             return null;
@@ -75,7 +57,7 @@ public class Crypto {
 
         try {
             signature.initSign(privateKey);
-            signature.update(imgBytes);
+            signature.update(data);
             return signature.sign();
         } catch (InvalidKeyException | SignatureException e) {
             e.printStackTrace();
@@ -83,10 +65,10 @@ public class Crypto {
         }
     }
 
-    public Boolean verify(byte[] sign) {
+    public Boolean verify(byte[] data, byte[] sign) {
         try {
             signature.initVerify(publicKey);
-            signature.update(imgBytes);
+            signature.update(data);
             return signature.verify(sign);
         } catch (InvalidKeyException | SignatureException e) {
             e.printStackTrace();

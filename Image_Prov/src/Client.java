@@ -35,13 +35,13 @@ public class Client {
         System.out.println("feature vector received: "+Arrays.toString(Utilities.byteArrToFloatArr(featureVectorBytes)));
 
         // get sign for feature vector
-        Crypto catCrypto = new Crypto(featureVectorBytes);
-        PublicKey publicKey = catCrypto.getPublicKey();
+        Crypto deviceCrypto = new Crypto();
+        PublicKey publicKey = deviceCrypto.getPublicKey();
 
         // send over public key. again, there will be a better way to do this in the final version
         oOut.writeObject(publicKey);
 
-        byte[] catSign = catCrypto.sign();
+        byte[] catSign = deviceCrypto.sign(featureVectorBytes);
 
         // assign metadata
         // all this hassle with dummy files because JpegXmpRewriter rewrites destructively, yikes

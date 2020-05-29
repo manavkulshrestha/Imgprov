@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class Utilities {
     public static byte[] fileToBytes(File file) {
@@ -40,5 +42,13 @@ public class Utilities {
     public static String badXmlStrParser(String xml, String tag) {
         int valueStart = xml.indexOf(tag)+tag.length()+1;
         return xml.substring(valueStart, xml.indexOf("</"+tag+">", valueStart));
+    }
+
+    public static String encodedString(byte[] data) {
+        return Base64.getEncoder().encodeToString(data);
+    }
+
+    public static byte[] decodedBytes(String data) {
+        return Base64.getDecoder().decode(data.getBytes(StandardCharsets.UTF_8));
     }
 }

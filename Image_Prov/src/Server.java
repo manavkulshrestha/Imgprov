@@ -45,8 +45,8 @@ public class Server {
         byte[] cat2Sign = Base64.getDecoder().decode(Utilities.badXmlStrParser(xml, "featureVectorSignature").getBytes(StandardCharsets.UTF_8));
 
         // verify with public key and send result
-        Crypto cat2Crypto = new Crypto(featureVector2Bytes, publicKey);
-        dOut.writeBoolean(cat2Crypto.verify(cat2Sign));
+        Crypto deviceVerifier = new Crypto(publicKey);
+        dOut.writeBoolean(deviceVerifier.verify(featureVector2Bytes, cat2Sign));
 
         // send result from feature vector deviation check
         float[] featureVector2 = Utilities.byteArrToFloatArr(featureVector2Bytes);
