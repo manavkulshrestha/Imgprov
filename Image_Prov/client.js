@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const EC = require('elliptic').ec
 
-//TODO, read file. no clue how to do that...
+//TODO, read file. no clue how to do that on javascript...
 
 // var reader = new FileReader();
 // var fileByteArray = [];
@@ -39,8 +39,8 @@ let image = [0,1,2,3,4];
 let signature = keys.sign(image);
 
 const test = {
-	'data': image,
-	'sign': {
+	'image': image,
+	'imageSign': {
         'r': signature.r.toString(10),
         's': signature.s.toString(10)
     },
