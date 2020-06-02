@@ -26,8 +26,14 @@ def obtain_feature_vector():
     feature_vector = [1,2,3,4]
 
     device_img_sign = tuple(int(data['imageSign'][x]) for x in ['r', 's'])
-    device_public_key = Point(int(data['publicKey']['x']), int(data['publicKey']['y']), curve=curve.secp256k1)
-    valid = ecdsa.verify(device_img_sign, bytes(data['image']), device_public_key, curve=curve.secp256k1)
+    device_public_x = int(data['publicKey']['x'])
+    device_public_y = int(data['publicKey']['y'])
+
+    # ccurately being verified on the serverccuratelyimage = bytes(data['image']['data'])
+    image = bytes(1)
+
+    device_public_key = Point(device_public_x, device_public_y, curve=curve.secp256k1)
+    valid = ecdsa.verify(device_img_sign, image, device_public_key, curve=curve.secp256k1)
     print(valid)
 
     r, s = ecdsa.sign(bytes(feature_vector), server_priv_key)
