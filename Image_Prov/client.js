@@ -35,8 +35,7 @@ let keys = ec.genKeyPair();
 let publicKey = keys.getPublic();
 
 // read image
-let image = Buffer.from([0,1,2,3,4]);
-image = 1;
+let image = '0';
 let signature = keys.sign(image);
 
 const test = {

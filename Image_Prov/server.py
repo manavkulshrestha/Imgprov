@@ -29,8 +29,8 @@ def obtain_feature_vector():
     device_public_x = int(data['publicKey']['x'])
     device_public_y = int(data['publicKey']['y'])
 
-    # ccurately being verified on the serverccuratelyimage = bytes(data['image']['data'])
-    image = bytes(1)
+    # image = bytes(data['image']['data'])
+    image = bytes.fromhex('00')
 
     device_public_key = Point(device_public_x, device_public_y, curve=curve.secp256k1)
     valid = ecdsa.verify(device_img_sign, image, device_public_key, curve=curve.secp256k1)
