@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import base64
 import ecdsa
 import datetime
@@ -14,22 +14,34 @@ public_key = None
 @app.route('/featureVector', methods=['POST'])
 def obtain_feature_vector():
     data = request.get_json()
+    # arbitrary vectyor
     feature_vector = [0,1,2,3,4]
 
-    # verify device sign
+    # decode data
     image = base64.b64decode(data['image'])
     device_image_sign = base64.b64decode(data['imageSign'])
 
-    print(len(device_image_sign))
+    # obtain device public key. this will be more elaborate in the future: temp
+    DEVICE_PUBLIC_KEY_FILENAME = '..\\resources\\device_public_key.pem'
+    with open(DEVICE_PUBLIC_KEY_FILENAME) as f:
+        device_public_key = ecdsa.VerifyingKey.from_pem(f.read())
 
-    print(public_key.verify(device_image_sign, image, hashfunc=hashlib.sha256, sigdecode=ecdsa.util.sigdecode_der)) # verification error
-    vector_sign = private_key.sign(bytes(feature_vector), hashfunc=hashlib.sha256)
+    # check verification from device
+    is_verified = device_public_key.verify(device_image_sign, image, hashfunc=hashlib.sha256, sigdecode=ecdsa.util.sigdecode_der)
+    if not is_verified:
+        return {'verified': is_verified}
+
+    # sign vector
+    vector_sign = private_key.sign(bytes(feature_vector), hashfunc=hashlib.sha256, sigencode=ecdsa.util.sigencode_der)
 
     return {
+        'verified': is_verified,
         'timestamp': str(datetime.datetime.utcnow()),
         'featureVector': feature_vector,
-        'featureVectorSign': base64.b64encode(vector_sign)
+        'featureVectorSign': base64.b64encode(vector_sign).decode('utf-8')
     }
+
+    return {1:1}
 
 @app.route('/verify', methods=['POST'])
 def verify():
@@ -47,7 +59,8 @@ def feature_vector_fromexif():
     
 if __name__ == '__main__':
 
-    SERVER_PRIVATE_KEY_FILENAME = 'server_private_key.pem'
+    # load or generate private keys
+    SERVER_PRIVATE_KEY_FILENAME = '..\\resources\\server_private_key.pem'
     try:
         # use existing keys
         with open(SERVER_PRIVATE_KEY_FILENAME) as f:
