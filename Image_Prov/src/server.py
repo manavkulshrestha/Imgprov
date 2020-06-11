@@ -46,11 +46,7 @@ def obtain_feature_vector():
 @app.route('/verify', methods=['POST'])
 def verify():
     data = request.get_json()
-    feature_vector = feature_vector_fromexif(data['image'])
-
-    # return {
-    #     'verificationResult': public_key.verify(bytes(feature_vector))
-    # }
+    print(data)
 
     return {1:1}
 

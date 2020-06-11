@@ -50,21 +50,40 @@ public class Crypto {
         return publicKey;
     }
 
-    public void savePublicKeyToPem(String filename) {
-        String publicKeyFormatted = "-----BEGIN EC PUBLIC KEY-----";
+    public String keyToPem(Key key) {
+        String keyType;
+        if (key instanceof PublicKey)
+            keyType = "PUBLIC";
+        else if (key instanceof  PrivateKey)
+            keyType = "PRIVATE";
+        else
+            // key type not recognized
+            return null;
 
-        String publicKeyContent = Base64.getEncoder().encodeToString(publicKey.getEncoded());
-        for (String piece: publicKeyContent.split("(?<=\\G.{64})")) {
-            publicKeyFormatted += "\n"+piece;
+        String keyFormatted = "-----BEGIN EC "+keyType+" KEY-----";
+
+        String keyContent = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+        for (String piece: keyContent.split("(?<=\\G.{64})")) {
+            keyFormatted += "\n"+piece;
         }
 
-        publicKeyFormatted += "\n-----END EC PUBLIC KEY-----";
+        return keyFormatted+"\n-----END EC "+keyType+" KEY-----";
+    }
 
+    public void saveKeyToPem(String filename, Key key) {
         try (FileWriter fw = new FileWriter(filename)) {
-            fw.write(publicKeyFormatted);
+            fw.write(keyToPem(key));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void savePublicKeyToPem(String filename) {
+        saveKeyToPem(filename, publicKey);
+    }
+
+    public void savePrivateKeyToPem(String filename) {
+        saveKeyToPem(filename, privateKey);
     }
 
     public byte[] sign(byte[] data) {

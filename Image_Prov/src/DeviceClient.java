@@ -53,10 +53,6 @@ public class DeviceClient {
             return;
         }
 
-
-    }
-
-    public static void modifyExif(File src, File dest) {
-        
+        // exifinterface only in android. need to port
     }
 }
