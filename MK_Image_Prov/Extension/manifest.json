@@ -1,0 +1,17 @@
+{
+	"name": "Image Verifier",
+	"version": "1.0",
+	"manifest_version": 2,
+	"content_scripts": [{
+		"matches": ["<all_urls>"],
+		"js": ["content.js"]
+	}],
+	"background": {
+		"scripts": ["background.js"],
+		"persistent": false
+	},
+	"browser_action": {
+		"default_title": "Image Provinance"
+	},
+	"permissions": ["contextMenus"]
+}
