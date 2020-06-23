@@ -2,11 +2,13 @@ from flask import Flask, request, jsonify
 import base64
 import ecdsa
 import datetime
-import numpy as np
 import sys
 import hashlib
 from exif import Image
 import json
+import urllib
+import os
+import tempfile
 
 app = Flask(__name__)
 
@@ -43,42 +45,36 @@ def obtain_feature_vector():
         'featureVectorSign': base64.b64encode(vector_sign).decode('utf-8')
     }
 
-    return {1:1}
-
 @app.route('/verify', methods=['POST'])
 def verify():
     data = request.get_json()
-
-    # fix so images dont rename each other. race conditions. save image as temp?
-    print(type(data['image']))
-    # print(data['image'])
-    byt = base64.decodebytes(bytes(data['image'], 'raw_unicode_escape'))
-    print()
-
-    with open(f'{RES_DIR}\\image.jpg', 'wb') as f:
-        f.write(byt)
-
-    image = None
-    with open(f'{RES_DIR}\\image.jpg', 'rb') as f:
-        image = Image(f)
-    os.remove(f'{RES_DIR}\\image.jpg')
+    
+    print(data['imageSrc'])
+    
+    with urllib.request.urlopen(data['imageSrc']) as url:
+        with tempfile.NamedTemporaryFile('w+b') as f:
+            f.write(url.read())
+            f.seek(0)
+            image = Image(f)
         
     if image.has_exif:
-        # try:
-        image_data = json.loads(image.image_description)
+        # image_data = json.loads(image.image_description)
+        image_data = image.image_description
 
-        feature_vector = image_data['featureVector']
-        feature_vector_sign = base64.b64decode(image_data['featureVectorSign'])
+        # feature_vector = image_data['featureVector']
+        # feature_vector_sign = base64.b64decode(image_data['featureVectorSign'])
 
-        vector_verified = public_key.verify(feature_vector_sign, data['image'], hashfunc=hashlib.sha256, sigdecode=ecdsa.util.sigdecode_der)
+        vector_verified = False
+        # vector_verified = public_key.verify(feature_vector_sign, data['image'], hashfunc=hashlib.sha256, sigdecode=ecdsa.util.sigdecode_der)
+
+
+        print(image.image_description)
 
         return {
             'imageSigned': True,
             'vectorSignVerified': vector_verified,
         }
-        # except Exception as e:
-        #     print(e)
-
+        
     return {'imageSigned': False}
 
 def feature_vector_fromexif():
